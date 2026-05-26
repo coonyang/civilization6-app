@@ -415,6 +415,28 @@ a {
   font-weight: 700;
 }
 
+.leader-selector {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 20px;
+}
+
+.leader-selector button {
+  padding: 8px 18px;
+  border: 1px solid rgb(226 187 108 / 45%);
+  border-radius: 40px;
+  background: transparent;
+  color: #e0d9c8;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.leader-selector button:hover,
+.leader-selector button.selected {
+  background: var(--gold-500);
+  color: var(--navy-950);
+}
+
 .detail-summary {
   max-width: 580px;
   margin: 0;
@@ -549,7 +571,7 @@ a {
 
 .lineage-panel,
 .unit-detail-panel {
-  min-height: 336px;
+  min-height: 365px;
   padding: 30px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -584,6 +606,7 @@ a {
   align-items: center;
   gap: 10px;
   margin-top: 40px;
+  flex-wrap: wrap;
 }
 
 .upgrade-step {
@@ -722,6 +745,17 @@ a {
 .difficulty-table td:first-child {
   color: var(--ink);
   font-weight: 700;
+}
+
+@media (max-width: 1120px) {
+  .war-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lineage-panel,
+  .unit-detail-panel {
+    min-height: 0;
+  }
 }
 
 .placement-page {
