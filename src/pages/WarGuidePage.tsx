@@ -6,23 +6,28 @@ function WarGuidePage() {
   const [selectedUnitId, setSelectedUnitId] = useState(
     unitLines[0].units[0].id,
   );
+
   const selectedLine = unitLines.find((line) => line.id === selectedLineId);
   const selectedUnit =
     selectedLine?.units.find((unit) => unit.id === selectedUnitId) ??
     selectedLine?.units[0];
+
   if (!selectedLine) {
-    return <p>병종 정보를 찾을 수 없습니다.</p>;
+    return <p className="not-found">병종 정보를 찾을 수 없습니다.</p>;
   }
 
   return (
-    <section>
-      <h1>전쟁 공략</h1>
-      <p>병종별 업그레이드 계보와 전투 정보를 확인하세요.</p>
+    <section className="content-page war-page">
+      <div className="page-heading">
+        <p className="eyebrow">WARFARE GUIDE</p>
+        <h1>전쟁 공략</h1>
+        <p>병종별 업그레이드 계보와 전투 정보를 확인하세요.</p>
+      </div>
 
-      <h2>병종 선택</h2>
-      <div>
+      <div className="unit-line-tabs">
         {unitLines.map((line) => (
           <button
+            className={line.id === selectedLineId ? "selected" : ""}
             key={line.id}
             type="button"
             onClick={() => setSelectedLineId(line.id)}
@@ -32,39 +37,76 @@ function WarGuidePage() {
         ))}
       </div>
 
-      <h2>{selectedLine.name} 계보</h2>
-      <p>{selectedLine.counterDescription}</p>
+      <div className="war-grid">
+        <article className="lineage-panel">
+          <p className="panel-label">UPGRADE PATH</p>
+          <h2>{selectedLine.name} 계보</h2>
+          <p className="line-description">{selectedLine.counterDescription}</p>
 
-      <div>
-        {selectedLine.units.map((unit, index) => (
-          <span key={unit.id}>
-            <button type="button" onClick={() => setSelectedUnitId(unit.id)}>
-              {unit.name}
-            </button>
+          <div className="upgrade-path">
+            {selectedLine.units.map((unit, index) => (
+              <span className="upgrade-step" key={unit.id}>
+                <button
+                  className={unit.id === selectedUnit?.id ? "selected" : ""}
+                  type="button"
+                  onClick={() => setSelectedUnitId(unit.id)}
+                >
+                  <small>{unit.era}</small>
+                  {unit.name}
+                </button>
 
-            {index < selectedLine.units.length - 1 && <span> → </span>}
-          </span>
-        ))}
-      </div>
-
-      {selectedUnit && (
-        <article>
-          <h2>{selectedUnit.name}</h2>
-          <p>시대: {selectedUnit.era}</p>
-          <p>전투력: {selectedUnit.strength}</p>
-          <p>이동력: {selectedUnit.movement}</p>
-
-          {selectedUnit.resource && <p>필요 자원: {selectedUnit.resource}</p>}
-
-          {selectedUnit.rangedStrength && (
-            <p>원거리 전투력: {selectedUnit.rangedStrength}</p>
-          )}
-
-          {selectedUnit.range && <p>사거리: {selectedUnit.range}</p>}
-
-          <p>{selectedUnit.description}</p>
+                {index < selectedLine.units.length - 1 && (
+                  <span className="path-arrow">{"\u2192"}</span>
+                )}
+              </span>
+            ))}
+          </div>
         </article>
-      )}
+
+        {selectedUnit && (
+          <article className="unit-detail-panel">
+            <p className="panel-label">UNIT DETAIL</p>
+            <h2>{selectedUnit.name}</h2>
+            <p className="unit-description">{selectedUnit.description}</p>
+
+            <dl className="unit-stats">
+              <div>
+                <dt>시대</dt>
+                <dd>{selectedUnit.era}</dd>
+              </div>
+              <div>
+                <dt>전투력</dt>
+                <dd>{selectedUnit.strength}</dd>
+              </div>
+              <div>
+                <dt>이동력</dt>
+                <dd>{selectedUnit.movement}</dd>
+              </div>
+
+              {selectedUnit.resource && (
+                <div>
+                  <dt>필요 자원</dt>
+                  <dd>{selectedUnit.resource}</dd>
+                </div>
+              )}
+
+              {selectedUnit.rangedStrength && (
+                <div>
+                  <dt>원거리 전투력</dt>
+                  <dd>{selectedUnit.rangedStrength}</dd>
+                </div>
+              )}
+
+              {selectedUnit.range && (
+                <div>
+                  <dt>사거리</dt>
+                  <dd>{selectedUnit.range}</dd>
+                </div>
+              )}
+            </dl>
+          </article>
+        )}
+      </div>
     </section>
   );
 }
