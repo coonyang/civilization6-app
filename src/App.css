@@ -305,6 +305,214 @@ a {
   line-height: 1.65;
 }
 
+.content-page {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 56px 0 72px;
+}
+
+.page-heading {
+  margin-bottom: 38px;
+}
+
+.page-heading h1 {
+  margin: 0 0 10px;
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: 38px;
+}
+
+.page-heading > p:last-child {
+  margin: 0;
+  color: var(--muted);
+}
+
+.civilization-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.civilization-card {
+  display: flex;
+  min-height: 244px;
+  padding: 27px 25px 23px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-card);
+  flex-direction: column;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.civilization-card:hover {
+  border-color: var(--gold-500);
+  box-shadow: 0 12px 30px rgb(16 37 53 / 9%);
+  transform: translateY(-3px);
+}
+
+.civilization-card-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.civilization-card-title h2 {
+  margin: 0;
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: 25px;
+}
+
+.civilization-card-title span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.victory-tag {
+  align-self: flex-start;
+  margin: 19px 0 14px;
+  padding: 6px 11px;
+  border-radius: 40px;
+  background: #f4ead4;
+  color: #926619;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.card-summary {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.card-link {
+  margin-top: auto;
+  color: #a57421;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.detail-hero {
+  position: relative;
+  padding: 42px 310px 42px 42px;
+  border-radius: 9px;
+  background: var(--navy-900);
+  color: #fffdf6;
+}
+
+.detail-hero h1 {
+  margin: 0 0 8px;
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: 43px;
+}
+
+.leader-name {
+  margin: 0 0 18px;
+  color: var(--gold-400);
+  font-weight: 700;
+}
+
+.detail-summary {
+  max-width: 580px;
+  margin: 0;
+  color: #d0d3cf;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.victory-panel {
+  position: absolute;
+  right: 42px;
+  top: 42px;
+  width: 216px;
+  padding: 20px;
+  border: 1px solid rgb(226 187 108 / 42%);
+  border-radius: 6px;
+  background: rgb(8 21 33 / 38%);
+}
+
+.victory-panel span,
+.victory-panel strong {
+  display: block;
+}
+
+.victory-panel span {
+  margin-bottom: 11px;
+  color: #b8b8ae;
+  font-size: 12px;
+}
+
+.victory-panel strong {
+  color: var(--gold-400);
+  font-size: 17px;
+}
+
+.detail-grid {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.guide-panel {
+  padding: 27px 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-card);
+}
+
+.guide-panel h2 {
+  margin: 0 0 18px;
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: 20px;
+}
+
+.guide-panel p,
+.guide-panel li {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.guide-panel p {
+  margin: 0;
+}
+
+.tips-panel {
+  grid-column: 1 / -1;
+}
+
+.tips-panel ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.tips-panel li + li {
+  margin-top: 8px;
+}
+
+.district-tags {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+.district-tags li {
+  padding: 8px 13px;
+  border-radius: 4px;
+  background: #f3ecdc;
+  color: #795719;
+  font-weight: 700;
+}
+
+.not-found {
+  width: min(1180px, calc(100% - 48px));
+  margin: 60px auto;
+}
+
 @media (max-width: 860px) {
   .site-header {
     height: auto;
@@ -335,12 +543,26 @@ a {
   .feature-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .civilization-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-hero {
+    padding: 34px 28px;
+  }
+
+  .victory-panel {
+    position: static;
+    margin-top: 26px;
+  }
 }
 
 @media (max-width: 560px) {
   .header-inner,
   .hero-content,
-  .feature-section {
+  .feature-section,
+  .content-page {
     width: min(100% - 32px, 1180px);
   }
 
@@ -354,6 +576,10 @@ a {
   }
 
   .feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-grid {
     grid-template-columns: 1fr;
   }
 }
