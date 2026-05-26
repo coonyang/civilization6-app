@@ -65,6 +65,22 @@ export const combatModifiers: CombatModifier[] = [
       "승선한 유닛이 육지의 유닛 또는 특수지구를 공격하면 페널티를 받습니다.",
   },
   {
+    id: "hp",
+    category: "공격 상황",
+    name: "현재 체력에 따른 전투력 보정",
+    modifier: 0,
+    description:
+      "- 0.1 x (100 - 체력이 떨어진 수치) | 체력이 50 떨어졌다면 전투력이 -5 감소합니다.",
+  },
+  {
+    id: "attack",
+    category: "공격 상황",
+    name: "상대 전투력에 따른 전투력 보정",
+    modifier: 0,
+    description:
+      "30 x e^(0.04 x StrengthDifference) x RandomValue | (RandomValue(0.8~1.2사이값)가 같을때 서로의 전투력이 같다면 30의 피해를 받고 차이가 클 수록 더 높은 피해를 받습니다.",
+  },
+  {
     id: "fortify-one-turn",
     category: "방어 상황",
     name: "요새화 1턴",
