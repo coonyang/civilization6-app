@@ -1,58 +1,93 @@
-export type MilitaryUnit = {
+export type Unit = {
   id: string;
   name: string;
-  unitClass: string;
   era: string;
   strength: number;
   movement: number;
-  upgradesTo: string | null;
-  advantages: string[];
-  terrainBonuses: string[];
+  rangedStrength?: number;
+  range?: number;
+  resource?: string;
+  description: string;
 };
 
-export const militaryUnits: MilitaryUnit[] = [
+export type UnitLine = {
+  id: string;
+  name: string;
+  counterDescription: string;
+  units: Unit[];
+};
+
+export const unitLines: UnitLine[] = [
   {
-    id: "warrior",
-    name: "전사",
-    unitClass: "근접",
-    era: "고대",
-    strength: 20,
-    movement: 2,
-    upgradesTo: "검사",
-    advantages: ["대기병 유닛을 상대하기 좋음", "도시 점령 가능"],
-    terrainBonuses: ["언덕 및 숲에서 방어 시 유리"],
+    id: "light-cavalry",
+    name: "경기병",
+    counterDescription:
+      "빠른 이동력으로 원거리 유닛과 약한 후방 유닛을 압박하는 병종",
+    units: [
+      {
+        id: "horseman",
+        name: "기마병",
+        era: "고전",
+        strength: 36,
+        movement: 4,
+        resource: "말",
+        description: "초중반 기동력이 뛰어난 경기병 유닛",
+      },
+      {
+        id: "courser",
+        name: "군마",
+        era: "산업",
+        strength: 46,
+        movement: 5,
+        resource: "말",
+        description: "기마병에서 업그레이드되는 빠른 돌파 유닛",
+      },
+      {
+        id: "helicopter",
+        name: "헬리콥터",
+        era: "원자",
+        strength: 86,
+        movement: 4,
+        resource: "알루미늄",
+        description: "경기병 계보의 현대 유닛",
+      },
+    ],
   },
   {
-    id: "slinger",
-    name: "투석병",
-    unitClass: "원거리",
-    era: "고대",
-    strength: 5,
-    movement: 2,
-    upgradesTo: "궁수",
-    advantages: ["근접 공격을 받기 전에 원거리 공격 가능"],
-    terrainBonuses: ["언덕 위에서 시야 확보에 유리"],
-  },
-  {
-    id: "spearman",
-    name: "창병",
-    unitClass: "대기병",
-    era: "고대",
-    strength: 25,
-    movement: 2,
-    upgradesTo: "장창병",
-    advantages: ["기병 계열 유닛을 상대로 강함"],
-    terrainBonuses: ["강 건너 공격을 받는 상황에서 방어에 유리"],
-  },
-  {
-    id: "horseman",
-    name: "기마병",
-    unitClass: "경기병",
-    era: "고전",
-    strength: 36,
-    movement: 4,
-    upgradesTo: "군마",
-    advantages: ["원거리 유닛을 빠르게 추격", "약탈과 측면 공격에 유리"],
-    terrainBonuses: ["평지에서 빠른 이동을 활용하기 좋음"],
+    id: "ranged",
+    name: "원거리",
+    counterDescription: "안전한 거리에서 공격하지만 근접 공격에 취약한 병종",
+    units: [
+      {
+        id: "slinger",
+        name: "투석병",
+        era: "고대",
+        strength: 5,
+        rangedStrength: 15,
+        range: 1,
+        movement: 2,
+        description: "가장 이른 시기에 사용할 수 있는 원거리 유닛",
+      },
+      {
+        id: "archer",
+        name: "궁수",
+        era: "고대",
+        strength: 15,
+        rangedStrength: 25,
+        range: 2,
+        movement: 2,
+        description: "초반 방어와 공격에서 유용한 원거리 유닛",
+      },
+      {
+        id: "crossbowman",
+        name: "석궁병",
+        era: "중세",
+        strength: 30,
+        rangedStrength: 40,
+        range: 2,
+        movement: 2,
+        description: "궁수에서 업그레이드되는 강력한 중세 원거리 유닛",
+      },
+    ],
   },
 ];
