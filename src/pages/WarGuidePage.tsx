@@ -112,64 +112,86 @@ function WarGuidePage() {
           )}
         </div>
       </section>
-      <section>
-        <h2>전투 보정 정보</h2>
+      <section className="rules-panel">
+        <div className="rules-heading">
+          <p className="panel-label">COMBAT MODIFIERS</p>
+          <h2>전투 보정 정보</h2>
+        </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>분류</th>
-              <th>상황</th>
-              <th>전투력</th>
-              <th>설명</th>
-            </tr>
-          </thead>
-          <tbody>
-            {combatModifiers.map((modifier) => (
-              <tr key={modifier.id}>
-                <td>{modifier.category}</td>
-                <td>{modifier.name}</td>
-                <td>
-                  {modifier.modifier > 0
-                    ? `+${modifier.modifier}`
-                    : modifier.modifier}
-                </td>
-                <td>{modifier.description}</td>
+        <div className="table-scroll">
+          <table className="guide-table">
+            <thead>
+              <tr>
+                <th>분류</th>
+                <th>상황</th>
+                <th>전투력</th>
+                <th>설명</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {combatModifiers.map((modifier) => (
+                <tr key={modifier.id}>
+                  <td>{modifier.category}</td>
+                  <td>{modifier.name}</td>
+                  <td
+                    className={
+                      modifier.modifier > 0 ? "positive" : "negative"
+                    }
+                  >
+                    {modifier.modifier > 0
+                      ? `+${modifier.modifier}`
+                      : modifier.modifier}
+                  </td>
+                  <td>{modifier.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
-      <section>
-        <h2>난이도별 전투력 보정</h2>
+      <section className="rules-panel">
+        <div className="rules-heading">
+          <p className="panel-label">DIFFICULTY BONUS</p>
+          <h2>난이도별 전투력 보정</h2>
+        </div>
 
-        <table>
-          <thead>
-            <tr>
-              <th>난이도</th>
-              <th>플레이어 전투력</th>
-              <th>AI 전투력</th>
-            </tr>
-          </thead>
-          <tbody>
-            {difficultyBonuses.map((bonus) => (
-              <tr key={bonus.difficulty}>
-                <td>{bonus.difficulty}</td>
-                <td>
-                  {bonus.playerCombatBonus > 0
-                    ? `+${bonus.playerCombatBonus}`
-                    : bonus.playerCombatBonus}
-                </td>
-                <td>
-                  {bonus.aiCombatBonus > 0
-                    ? `+${bonus.aiCombatBonus}`
-                    : bonus.aiCombatBonus}
-                </td>
+        <div className="table-scroll">
+          <table className="guide-table difficulty-table">
+            <thead>
+              <tr>
+                <th>난이도</th>
+                <th>플레이어 전투력</th>
+                <th>AI 전투력</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {difficultyBonuses.map((bonus) => (
+                <tr key={bonus.difficulty}>
+                  <td>{bonus.difficulty}</td>
+                  <td className={bonus.playerCombatBonus > 0 ? "positive" : ""}>
+                    {bonus.playerCombatBonus > 0
+                      ? `+${bonus.playerCombatBonus}`
+                      : bonus.playerCombatBonus}
+                  </td>
+                  <td
+                    className={
+                      bonus.aiCombatBonus > 0
+                        ? "negative"
+                        : bonus.aiCombatBonus < 0
+                          ? "positive"
+                          : ""
+                    }
+                  >
+                    {bonus.aiCombatBonus > 0
+                      ? `+${bonus.aiCombatBonus}`
+                      : bonus.aiCombatBonus}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
     </>
   );

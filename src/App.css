@@ -652,6 +652,75 @@ a {
   font-weight: 700;
 }
 
+.rules-panel {
+  margin-top: 22px;
+  padding: 28px 30px 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper-card);
+}
+
+.rules-heading {
+  margin-bottom: 22px;
+}
+
+.rules-heading h2 {
+  margin: 0;
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: 24px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.guide-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  text-align: left;
+}
+
+.guide-table th {
+  padding: 13px 14px;
+  border-top: 1px solid var(--navy-800);
+  border-bottom: 1px solid var(--navy-800);
+  background: var(--navy-900);
+  color: #ede6d6;
+  font-size: 13px;
+}
+
+.guide-table td {
+  padding: 14px;
+  border-bottom: 1px solid #e5dece;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.guide-table td:nth-child(2) {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.guide-table td.positive {
+  color: #337455;
+  font-weight: 700;
+}
+
+.guide-table td.negative {
+  color: #a54036;
+  font-weight: 700;
+}
+
+.difficulty-table {
+  max-width: 660px;
+}
+
+.difficulty-table td:first-child {
+  color: var(--ink);
+  font-weight: 700;
+}
+
 @media (max-width: 860px) {
   .site-header {
     height: auto;
