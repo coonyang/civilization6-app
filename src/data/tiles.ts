@@ -32,3 +32,42 @@ export function createEmptyBoard(radius: number): HexTile[] {
 
   return tiles;
 }
+
+export type PlacementOption = {
+  id: TileContent;
+  name: string;
+  color: string;
+};
+
+export const placementOptions: PlacementOption[] = [
+  {
+    id: "empty",
+    name: "지우기",
+    color: "#fffdf8",
+  },
+  {
+    id: "campus",
+    name: "캠퍼스",
+    color: "#6ea9d7",
+  },
+  {
+    id: "holy-site",
+    name: "성지",
+    color: "#e4c878",
+  },
+  {
+    id: "commercial-hub",
+    name: "상업 중심지",
+    color: "#d7a759",
+  },
+  {
+    id: "industrial-zone",
+    name: "산업구역",
+    color: "#8b9298",
+  },
+  {
+    id: "theater-square",
+    name: "극장가",
+    color: "#ba86bd",
+  },
+];
