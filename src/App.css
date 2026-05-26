@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-/* 홈페이지 css */
-
 :root {
   --navy-950: #081521;
   --navy-900: #102535;
@@ -340,7 +338,10 @@ a {
   border-radius: 8px;
   background: var(--paper-card);
   flex-direction: column;
-  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
 }
 
 .civilization-card:hover {
@@ -719,6 +720,32 @@ a {
 .difficulty-table td:first-child {
   color: var(--ink);
   font-weight: 700;
+}
+
+.hex-board {
+  position: relative;
+  width: 620px;
+  height: 620px;
+  margin: 40px auto;
+}
+
+.hex-tile {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 72px;
+  height: 84px;
+  border: 1px solid #cda04b;
+  background: #fffdf8;
+  color: #667783;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.hex-tile:hover {
+  background: #f2e8d2;
+  color: #805812;
 }
 
 @media (max-width: 860px) {
