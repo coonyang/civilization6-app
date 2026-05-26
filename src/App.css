@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+/* 홈페이지 css */
+
 :root {
   --navy-950: #081521;
   --navy-900: #102535;
@@ -116,7 +118,12 @@ a {
   color: #fffdf6;
   background:
     radial-gradient(circle at 78% 44%, rgb(205 160 75 / 17%), transparent 25%),
-    linear-gradient(116deg, var(--navy-950) 0%, var(--navy-900) 54%, #172d39 100%);
+    linear-gradient(
+      116deg,
+      var(--navy-950) 0%,
+      var(--navy-900) 54%,
+      #172d39 100%
+    );
 }
 
 .hero::before {
@@ -177,7 +184,9 @@ a {
   justify-content: center;
   border-radius: 4px;
   font-weight: 700;
-  transition: transform 150ms ease, background 150ms ease;
+  transition:
+    transform 150ms ease,
+    background 150ms ease;
 }
 
 .primary-button {
@@ -265,7 +274,10 @@ a {
   border: 1px solid var(--line);
   border-radius: 6px;
   background: var(--paper-card);
-  transition: border-color 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .feature-card:hover {
