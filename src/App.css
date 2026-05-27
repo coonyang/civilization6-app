@@ -886,6 +886,21 @@ a {
   background: #f2e8d2;
 }
 
+.clear-board-button {
+  margin-top: 14px;
+  padding: 9px 16px;
+  border: 1px solid #b85d51;
+  border-radius: 5px;
+  background: transparent;
+  color: #a54036;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.clear-board-button:hover {
+  background: #f6e4df;
+}
+
 @media (max-width: 860px) {
   .site-header {
     height: auto;

@@ -44,13 +44,21 @@ function PlacementToolPage() {
     );
     setSelectedTileId(null);
   };
+
+  const clearBoard = () => {
+    setTiles(createEmptyBoard(5));
+    setSelectedTileId(null);
+  };
+
   return (
     <section className="placement-page">
       <h1>배치툴</h1>
       <p>특수지구를 배치하고 인접 보너스를 계산하세요.</p>
 
       <p>현재 타일 수: {tiles.length}</p>
-
+      <button className="clear-board-button" type="button" onClick={clearBoard}>
+        모두 지우기
+      </button>
       <div className="board-viewport">
         <div className="hex-board">
           {tiles.map((tile) => {
