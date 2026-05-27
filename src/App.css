@@ -785,16 +785,21 @@ a {
 
 .hex-board {
   position: relative;
-  width: 820px;
-  height: 820px;
+  width: 990px;
+  height: 990px;
   margin: 24px auto;
 }
+
 .hex-tile {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 72px;
-  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 102px;
+  padding: 0 7px;
   border: 1px solid #cda04b;
   background: #fffdf8;
   color: #667783;
@@ -827,7 +832,7 @@ a {
   left: 50%;
   top: 50%;
   z-index: 5;
-  width: 300px;
+  width: 340px;
   padding: 12px;
   border: 1px solid var(--gold-500);
   border-radius: 7px;
@@ -906,7 +911,7 @@ a {
   color: var(--ink);
 }
 
-.hex-tile span,
+.tile-label,
 .hex-tile strong {
   display: block;
 }
@@ -915,6 +920,110 @@ a {
   margin-top: 3px;
   font-size: 12px;
   color: var(--navy-900);
+}
+
+.popup-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.popup-tabs button {
+  flex: 1;
+  padding: 7px 4px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.popup-tabs button.selected {
+  border-color: var(--gold-500);
+  background: #f2e8d2;
+  color: var(--ink);
+}
+
+.popup-options button.selected {
+  border-color: #4b9fc2;
+  background: #e1f0f5;
+  color: var(--ink);
+}
+
+.river-edge {
+  position: absolute;
+  z-index: 4;
+  display: block;
+  height: 5px;
+  background: #3d9fd1;
+  pointer-events: none;
+}
+
+.river-north-west {
+  left: 20%;
+  top: -2px;
+  width: 60%;
+}
+
+.river-south-east {
+  left: 20%;
+  bottom: 0;
+  width: 60%;
+}
+
+.river-north-east {
+  left: 75%;
+  top: -1px;
+  width: 65%;
+  transform: rotate(66.6deg);
+  transform-origin: 0 50%;
+}
+
+.river-east {
+  left: 100%;
+  top: 49%;
+  width: 65%;
+  transform: rotate(113.4deg);
+  transform-origin: 0 30%;
+}
+
+.river-west {
+  left: 25%;
+  top: 0;
+  width: 65%;
+  transform: rotate(113.4deg);
+  transform-origin: 0 50%;
+}
+
+.river-south-west {
+  left: 0;
+  top: 50%;
+  width: 65%;
+  transform: rotate(66.6deg);
+  transform-origin: 0 50%;
+}
+
+.tile-label {
+  position: relative;
+  z-index: 1;
+  display: block;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.tile-properties {
+  position: absolute;
+  left: 7px;
+  right: 7px;
+  top: 60%;
+  z-index: 3;
+  display: block;
+  color: #203947;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
 }
 
 @media (max-width: 860px) {
