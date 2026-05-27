@@ -901,6 +901,22 @@ a {
   background: #f6e4df;
 }
 
+.hex-tile.neighbor {
+  border: 2px dashed var(--gold-500);
+  color: var(--ink);
+}
+
+.hex-tile span,
+.hex-tile strong {
+  display: block;
+}
+
+.hex-tile strong {
+  margin-top: 3px;
+  font-size: 12px;
+  color: var(--navy-900);
+}
+
 @media (max-width: 860px) {
   .site-header {
     height: auto;

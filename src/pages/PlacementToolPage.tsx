@@ -2,6 +2,8 @@ import { useState } from "react";
 import {
   createEmptyBoard,
   placementOptions,
+  getNeighborTiles,
+  calculateCampusAdjacency,
   type HexTile,
   type TileContent,
 } from "../data/tiles";
@@ -22,6 +24,10 @@ function PlacementToolPage() {
   const [selectedTileId, setSelectedTileId] = useState<string | null>(null);
 
   const selectedTile = tiles.find((tile) => tile.id === selectedTileId);
+
+  const neighborTiles = selectedTile
+    ? getNeighborTiles(selectedTile, tiles)
+    : [];
 
   const selectedTilePosition = selectedTile
     ? getHexPosition(selectedTile.q, selectedTile.r)
@@ -66,9 +72,15 @@ function PlacementToolPage() {
             const contentOption = placementOptions.find(
               (option) => option.id === tile.content,
             );
+            const isNeighbor = neighborTiles.some(
+              (neighbor) => neighbor.id === tile.id,
+            );
+            const adjacencyBonus = calculateCampusAdjacency(tile, tiles);
             return (
               <button
-                className={`hex-tile ${tile.id === selectedTileId ? "selected" : ""}`}
+                className={`hex-tile ${tile.id === selectedTileId ? "selected" : ""} ${
+                  isNeighbor ? "neighbor" : ""
+                }`}
                 onClick={() => setSelectedTileId(tile.id)}
                 key={tile.id}
                 type="button"
@@ -77,7 +89,16 @@ function PlacementToolPage() {
                   backgroundColor: contentOption?.color,
                 }}
               >
-                {tile.content === "empty" ? tile.id : contentOption?.name}
+                {tile.content === "empty" ? (
+                  tile.id
+                ) : (
+                  <>
+                    <span>{contentOption?.name}</span>
+                    {tile.content === "campus" && (
+                      <strong>+{adjacencyBonus}</strong>
+                    )}
+                  </>
+                )}
               </button>
             );
           })}

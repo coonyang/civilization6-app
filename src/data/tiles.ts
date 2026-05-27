@@ -48,6 +48,74 @@ export function createEmptyBoard(radius: number): HexTile[] {
   return tiles;
 }
 
+const neighborDirections = [
+  { q: 1, r: 0 },
+  { q: 1, r: -1 },
+  { q: 0, r: -1 },
+  { q: -1, r: 0 },
+  { q: -1, r: 1 },
+  { q: 0, r: 1 },
+];
+
+export function getNeighborTiles(tile: HexTile, tiles: HexTile[]): HexTile[] {
+  return neighborDirections
+    .map((direction) =>
+      tiles.find(
+        (candidate) =>
+          candidate.q === tile.q + direction.q &&
+          candidate.r === tile.r + direction.r,
+      ),
+    )
+    .filter((neighbor): neighbor is HexTile => neighbor !== undefined);
+}
+
+const districtContents: TileContent[] = [
+  "city-center",
+  "campus",
+  "holy-site",
+  "commercial-hub",
+  "industrial-zone",
+  "theater-square",
+  "government-plaza",
+  "encampment",
+  "harbor",
+  "aerodrome",
+  "entertainment-complex",
+  "water-park",
+  "diplomatic-quarter",
+  "aqueduct",
+  "dam",
+  "canal",
+  "spaceport",
+  "preserve",
+  "neighborhood",
+];
+
+export function calculateCampusAdjacency(
+  tile: HexTile,
+  tiles: HexTile[],
+): number {
+  if (tile.content !== "campus") {
+    return 0;
+  }
+
+  const neighbors = getNeighborTiles(tile, tiles);
+
+  const governmentPlazaBonus = neighbors.some(
+    (neighbor) => neighbor.content === "government-plaza",
+  )
+    ? 1
+    : 0;
+
+  const adjacentDistrictCount = neighbors.filter((neighbor) =>
+    districtContents.includes(neighbor.content),
+  ).length;
+
+  const districtBonus = Math.floor(adjacentDistrictCount / 2);
+
+  return governmentPlazaBonus + districtBonus;
+}
+
 export type PlacementOption = {
   id: TileContent;
   name: string;
