@@ -1026,6 +1026,16 @@ a {
   text-align: center;
 }
 
+.adjacency-bonus {
+  position: absolute;
+  top: 23%;
+  right: 20%;
+  font-size: 15px;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 4px black;
+}
+
 @media (max-width: 860px) {
   .site-header {
     height: auto;

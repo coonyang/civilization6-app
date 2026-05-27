@@ -9,6 +9,7 @@ import {
   riverEdgeOptions,
   terrainOptions,
   toggleRiverEdge,
+  calculateCampusAdjacency,
   type DistrictType,
   type FeatureType,
   type HexEdge,
@@ -163,6 +164,7 @@ function PlacementToolPage() {
         <div className="hex-board">
           {tiles.map((tile) => {
             const position = getHexPosition(tile.q, tile.r);
+            const campusAdjacency = calculateCampusAdjacency(tile, tiles);
             const districtOption = districtOptions.find(
               (option) => option.id === tile.district,
             );
@@ -219,7 +221,9 @@ function PlacementToolPage() {
                       ? terrainOption?.name
                       : tile.id}
                 </span>
-
+                {campusAdjacency > 0 && (
+                  <span className="adjacency-bonus">+{campusAdjacency}</span>
+                )}
                 {tileProperties.length > 0 && (
                   <span className="tile-properties">
                     {tileProperties.join(" ")}
