@@ -134,31 +134,184 @@ const adjacencyDistricts: DistrictType[] = [
   "neighborhood",
 ];
 
-export function calculateCampusAdjacency(
+type AdjacencyRule = {
+  districts?: {
+    types: DistrictType[];
+    yield: number;
+    amount: number;
+  }[];
+
+  terrains?: {
+    types: TerrainType[];
+    yield: number;
+  }[];
+
+  features?: {
+    types: FeatureType[];
+    yield: number;
+  }[];
+
+  river?: number;
+
+  wonders?: number;
+
+  governmentPlaza?: number;
+};
+
+const adjacencyRules: Partial<Record<DistrictType, AdjacencyRule>> = {
+  campus: {
+    districts: [
+      {
+        types: adjacencyDistricts,
+        amount: 2,
+        yield: 1,
+      },
+    ],
+
+    terrains: [
+      {
+        types: ["mountain"],
+        yield: 1,
+      },
+    ],
+
+    features: [
+      {
+        types: ["geothermal-fissure"],
+        yield: 1,
+      },
+    ],
+
+    governmentPlaza: 1,
+  },
+
+  "commercial-hub": {
+    districts: [
+      {
+        types: adjacencyDistricts,
+        amount: 2,
+        yield: 1,
+      },
+    ],
+
+    river: 2,
+
+    governmentPlaza: 1,
+  },
+
+  "theater-square": {
+    districts: [
+      {
+        types: adjacencyDistricts,
+        amount: 2,
+        yield: 1,
+      },
+    ],
+
+    wonders: 2,
+
+    governmentPlaza: 1,
+  },
+
+  "holy-site": {
+    districts: [
+      {
+        types: adjacencyDistricts,
+        amount: 2,
+        yield: 1,
+      },
+    ],
+
+    governmentPlaza: 1,
+  },
+
+  "industrial-zone": {
+    districts: [
+      {
+        types: adjacencyDistricts,
+        amount: 2,
+        yield: 1,
+      },
+    ],
+
+    governmentPlaza: 1,
+  },
+};
+
+export function calculateDistrictAdjacency(
   tile: HexTile,
   tiles: HexTile[],
 ): number {
-  if (tile.district !== "campus") {
+  if (!tile.district) {
+    return 0;
+  }
+
+  const rule = adjacencyRules[tile.district];
+
+  if (!rule) {
     return 0;
   }
 
   const neighbors = getNeighborTiles(tile, tiles);
 
-  const governmentPlazaBonus = neighbors.some(
-    (neighbor) => neighbor.district === "government-plaza",
-  )
-    ? 1
-    : 0;
+  let total = 0;
 
-  const adjacentDistrictCount = neighbors.filter(
-    (neighbor) =>
-      neighbor.district !== null &&
-      adjacencyDistricts.includes(neighbor.district),
-  ).length;
+  if (rule.governmentPlaza) {
+    const hasGovernmentPlaza = neighbors.some(
+      (neighbor) => neighbor.district === "government-plaza",
+    );
 
-  const districtBonus = Math.floor(adjacentDistrictCount / 2);
+    if (hasGovernmentPlaza) {
+      total += rule.governmentPlaza;
+    }
+  }
 
-  return governmentPlazaBonus + districtBonus;
+  if (rule.districts) {
+    for (const districtRule of rule.districts) {
+      const count = neighbors.filter(
+        (neighbor) =>
+          neighbor.district && districtRule.types.includes(neighbor.district),
+      ).length;
+
+      total += Math.floor(count / districtRule.amount) * districtRule.yield;
+    }
+  }
+
+  if (rule.terrains) {
+    for (const terrainRule of rule.terrains) {
+      const count = neighbors.filter((neighbor) =>
+        terrainRule.types.includes(neighbor.terrain),
+      ).length;
+
+      total += count * terrainRule.yield;
+    }
+  }
+
+  if (rule.features) {
+    for (const featureRule of rule.features) {
+      const count = neighbors.filter(
+        (neighbor) =>
+          neighbor.feature && featureRule.types.includes(neighbor.feature),
+      ).length;
+
+      total += count * featureRule.yield;
+    }
+  }
+
+  if (rule.river) {
+    if (tile.riverEdges.length > 0) {
+      total += rule.river;
+    }
+  }
+
+  if (rule.wonders) {
+    const wonderCount = neighbors.filter(
+      (neighbor) => neighbor.district === "wonder",
+    ).length;
+
+    total += wonderCount * rule.wonders;
+  }
+  return total;
 }
 
 export type DistrictOption = {
