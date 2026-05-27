@@ -1,10 +1,25 @@
 export type TileContent =
   | "empty"
+  | "city-center"
   | "campus"
   | "holy-site"
   | "commercial-hub"
   | "industrial-zone"
-  | "theater-square";
+  | "theater-square"
+  | "government-plaza"
+  | "encampment"
+  | "harbor"
+  | "aerodrome"
+  | "entertainment-complex"
+  | "water-park"
+  | "diplomatic-quarter"
+  | "aqueduct"
+  | "dam"
+  | "canal"
+  | "spaceport"
+  | "preserve"
+  | "neighborhood"
+  | "wonder";
 
 export type HexTile = {
   id: string;
@@ -40,34 +55,25 @@ export type PlacementOption = {
 };
 
 export const placementOptions: PlacementOption[] = [
-  {
-    id: "empty",
-    name: "지우기",
-    color: "#fffdf8",
-  },
-  {
-    id: "campus",
-    name: "캠퍼스",
-    color: "#6ea9d7",
-  },
-  {
-    id: "holy-site",
-    name: "성지",
-    color: "#e4c878",
-  },
-  {
-    id: "commercial-hub",
-    name: "상업 중심지",
-    color: "#d7a759",
-  },
-  {
-    id: "industrial-zone",
-    name: "산업구역",
-    color: "#8b9298",
-  },
-  {
-    id: "theater-square",
-    name: "극장가",
-    color: "#ba86bd",
-  },
+  { id: "empty", name: "지우기", color: "#fffdf8" },
+  { id: "city-center", name: "도심부", color: "#b77c54" },
+  { id: "campus", name: "캠퍼스", color: "#6ea9d7" },
+  { id: "holy-site", name: "성지", color: "#e4c878" },
+  { id: "commercial-hub", name: "상업 중심지", color: "#d7a759" },
+  { id: "industrial-zone", name: "산업구역", color: "#8b9298" },
+  { id: "theater-square", name: "극장가", color: "#ba86bd" },
+  { id: "government-plaza", name: "정부 청사", color: "#8e6bb4" },
+  { id: "encampment", name: "주둔지", color: "#8e6653" },
+  { id: "harbor", name: "항만", color: "#4f9cb7" },
+  { id: "aerodrome", name: "비행장", color: "#8395a5" },
+  { id: "entertainment-complex", name: "유흥단지", color: "#d87589" },
+  { id: "water-park", name: "워터파크", color: "#4caec4" },
+  { id: "diplomatic-quarter", name: "외교지구", color: "#86a263" },
+  { id: "aqueduct", name: "송수로", color: "#70afc7" },
+  { id: "dam", name: "댐", color: "#67859b" },
+  { id: "canal", name: "운하", color: "#6ba8bc" },
+  { id: "spaceport", name: "우주공항", color: "#53647d" },
+  { id: "preserve", name: "보존", color: "#62a57b" },
+  { id: "neighborhood", name: "주택단지", color: "#ce9070" },
+  { id: "wonder", name: "불가사의", color: "#d9b450" },
 ];

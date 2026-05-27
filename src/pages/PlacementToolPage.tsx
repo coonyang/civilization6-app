@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { createEmptyBoard, type HexTile } from "../data/tiles";
+import {
+  createEmptyBoard,
+  placementOptions,
+  type HexTile,
+  type TileContent,
+} from "../data/tiles";
 
 function getHexPosition(q: number, r: number) {
   const tileWidth = 72;
@@ -12,8 +17,33 @@ function getHexPosition(q: number, r: number) {
 }
 
 function PlacementToolPage() {
-  const [tiles] = useState<HexTile[]>(() => createEmptyBoard(5));
+  const [tiles, setTiles] = useState<HexTile[]>(() => createEmptyBoard(5));
 
+  const [selectedTileId, setSelectedTileId] = useState<string | null>(null);
+
+  const selectedTile = tiles.find((tile) => tile.id === selectedTileId);
+
+  const selectedTilePosition = selectedTile
+    ? getHexPosition(selectedTile.q, selectedTile.r)
+    : null;
+
+  const popupOffsetX = selectedTile && selectedTile.q >= 2 ? -322 : 82;
+
+  const popupOffsetY =
+    selectedTile && selectedTile.r + selectedTile.q / 2 >= 2 ? -326 : 0;
+
+  const placeContent = (content: TileContent) => {
+    if (!selectedTile) {
+      return;
+    }
+
+    setTiles((currentTiles) =>
+      currentTiles.map((tile) =>
+        tile.id === selectedTileId ? { ...tile, content } : tile,
+      ),
+    );
+    setSelectedTileId(null);
+  };
   return (
     <section className="placement-page">
       <h1>배치툴</h1>
@@ -25,20 +55,57 @@ function PlacementToolPage() {
         <div className="hex-board">
           {tiles.map((tile) => {
             const position = getHexPosition(tile.q, tile.r);
-
+            const contentOption = placementOptions.find(
+              (option) => option.id === tile.content,
+            );
             return (
               <button
-                className="hex-tile"
+                className={`hex-tile ${tile.id === selectedTileId ? "selected" : ""}`}
+                onClick={() => setSelectedTileId(tile.id)}
                 key={tile.id}
                 type="button"
                 style={{
                   transform: `translate(${position.x}px, ${position.y}px)`,
+                  backgroundColor: contentOption?.color,
                 }}
               >
-                {tile.id}
+                {tile.content === "empty" ? tile.id : contentOption?.name}
               </button>
             );
           })}
+          {selectedTile && selectedTilePosition && (
+            <aside
+              className="tile-construction-popup"
+              style={{
+                transform: `translate(${selectedTilePosition.x + popupOffsetX}px, ${selectedTilePosition.y + popupOffsetY}px)`,
+              }}
+            >
+              <div className="popup-heading">
+                <strong>건설 선택</strong>
+                <button type="button" onClick={() => setSelectedTileId(null)}>
+                  ×
+                </button>
+              </div>
+
+              <p className="popup-tile-name">{selectedTile.id}</p>
+
+              <div className="popup-options">
+                {placementOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => placeContent(option.id)}
+                  >
+                    <span
+                      className="palette-color"
+                      style={{ backgroundColor: option.color }}
+                    />
+                    {option.name}
+                  </button>
+                ))}
+              </div>
+            </aside>
+          )}
         </div>
       </div>
     </section>
