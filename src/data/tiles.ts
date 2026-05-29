@@ -39,7 +39,10 @@ export type FeatureType =
   | "geothermal-fissure"
   | "oasis"
   | "floodplains"
-  | "marsh";
+  | "marsh"
+  | "forest"
+  | "rainforest"
+  | "reef";
 
 export type ResourceCategory =
   | "strategic"
@@ -54,6 +57,8 @@ export type ResourceType = {
   category: ResourceCategory;
 };
 
+export type ImprovementType = "mine" | "quarry" | "farm" | "lumber-mill";
+
 export type HexTile = {
   id: string;
   q: number;
@@ -64,6 +69,7 @@ export type HexTile = {
   resource: ResourceType | null;
   district: DistrictType | null;
   riverEdges: HexEdge[];
+  improvement: ImprovementType | null;
 };
 
 export function createEmptyBoard(radius: number): HexTile[] {
@@ -84,6 +90,7 @@ export function createEmptyBoard(radius: number): HexTile[] {
         resource: null,
         district: null,
         riverEdges: [],
+        improvement: null,
       });
     }
   }
@@ -149,12 +156,22 @@ type AdjacencyRule = {
   features?: {
     types: FeatureType[];
     yield: number;
+    amount?: number;
+  }[];
+
+  improvements?: {
+    types: ImprovementType[];
+    yield: number;
+    amount: number;
+  }[];
+
+  adjacentDistricts?: {
+    district: DistrictType;
+    yield: number;
   }[];
 
   river?: number;
-
   wonders?: number;
-
   governmentPlaza?: number;
 };
 
@@ -178,6 +195,15 @@ const adjacencyRules: Partial<Record<DistrictType, AdjacencyRule>> = {
     features: [
       {
         types: ["geothermal-fissure"],
+        yield: 2,
+      },
+      {
+        types: ["reef"],
+        yield: 2,
+      },
+      {
+        types: ["rainforest"],
+        amount: 2,
         yield: 1,
       },
     ],
@@ -191,6 +217,13 @@ const adjacencyRules: Partial<Record<DistrictType, AdjacencyRule>> = {
         types: adjacencyDistricts,
         amount: 2,
         yield: 1,
+      },
+    ],
+
+    adjacentDistricts: [
+      {
+        district: "harbor",
+        yield: 2,
       },
     ],
 
@@ -208,6 +241,17 @@ const adjacencyRules: Partial<Record<DistrictType, AdjacencyRule>> = {
       },
     ],
 
+    adjacentDistricts: [
+      {
+        district: "entertainment-complex",
+        yield: 2,
+      },
+      {
+        district: "water-park",
+        yield: 2,
+      },
+    ],
+
     wonders: 2,
 
     governmentPlaza: 1,
@@ -222,15 +266,75 @@ const adjacencyRules: Partial<Record<DistrictType, AdjacencyRule>> = {
       },
     ],
 
+    terrains: [
+      {
+        types: ["mountain"],
+        yield: 1,
+      },
+    ],
+
+    features: [
+      {
+        types: ["forest"],
+        amount: 2,
+        yield: 1,
+      },
+    ],
+
     governmentPlaza: 1,
   },
-
   "industrial-zone": {
     districts: [
       {
         types: adjacencyDistricts,
         amount: 2,
         yield: 1,
+      },
+    ],
+
+    improvements: [
+      {
+        types: ["mine"],
+        amount: 2,
+        yield: 1,
+      },
+      {
+        types: ["quarry"],
+        amount: 2,
+        yield: 1,
+      },
+    ],
+
+    adjacentDistricts: [
+      {
+        district: "aqueduct",
+        yield: 2,
+      },
+      {
+        district: "dam",
+        yield: 2,
+      },
+      {
+        district: "canal",
+        yield: 2,
+      },
+    ],
+
+    governmentPlaza: 1,
+  },
+  harbor: {
+    districts: [
+      {
+        types: adjacencyDistricts,
+        amount: 2,
+        yield: 1,
+      },
+    ],
+
+    adjacentDistricts: [
+      {
+        district: "city-center",
+        yield: 2,
       },
     ],
 
@@ -294,7 +398,34 @@ export function calculateDistrictAdjacency(
           neighbor.feature && featureRule.types.includes(neighbor.feature),
       ).length;
 
-      total += count * featureRule.yield;
+      if (featureRule.amount) {
+        total += Math.floor(count / featureRule.amount) * featureRule.yield;
+      } else {
+        total += count * featureRule.yield;
+      }
+    }
+  }
+
+  if (rule.improvements) {
+    for (const improvementRule of rule.improvements) {
+      const count = neighbors.filter(
+        (neighbor) =>
+          neighbor.improvement &&
+          improvementRule.types.includes(neighbor.improvement),
+      ).length;
+
+      total +=
+        Math.floor(count / improvementRule.amount) * improvementRule.yield;
+    }
+  }
+
+  if (rule.adjacentDistricts) {
+    for (const districtRule of rule.adjacentDistricts) {
+      const count = neighbors.filter(
+        (neighbor) => neighbor.district === districtRule.district,
+      ).length;
+
+      total += count * districtRule.yield;
     }
   }
 
@@ -347,29 +478,30 @@ export const districtOptions: DistrictOption[] = [
 export type TerrainOption = {
   id: TerrainType;
   name: string;
-  color: string;
 };
 
 export const terrainOptions: TerrainOption[] = [
-  { id: "plains", name: "평원", color: "#d3bd7a" },
-  { id: "grassland", name: "초원", color: "#92b765" },
-  { id: "desert", name: "사막", color: "#ddc888" },
-  { id: "mountain", name: "산", color: "#8c8f92" },
-  { id: "coast", name: "해안", color: "#68b5cf" },
+  { id: "plains", name: "평원" },
+  { id: "grassland", name: "초원" },
+  { id: "desert", name: "사막" },
+  { id: "mountain", name: "산" },
+  { id: "coast", name: "해안" },
 ];
 
 export type FeatureOption = {
   id: FeatureType | null;
   name: string;
-  color: string;
 };
 
 export const featureOptions: FeatureOption[] = [
-  { id: null, name: "요소 지우기", color: "#fffdf8" },
-  { id: "geothermal-fissure", name: "지열 열하구", color: "#e16d4d" },
-  { id: "oasis", name: "오아시스", color: "#3ca881" },
-  { id: "floodplains", name: "범람원", color: "#d4b36d" },
-  { id: "marsh", name: "습지", color: "#718e58" },
+  { id: null, name: "요소 지우기" },
+  { id: "geothermal-fissure", name: "지열 열하구" },
+  { id: "oasis", name: "오아시스" },
+  { id: "floodplains", name: "범람원" },
+  { id: "marsh", name: "습지" },
+  { id: "forest", name: "숲" },
+  { id: "rainforest", name: "열대우림" },
+  { id: "reef", name: "산호초" },
 ];
 
 export type HillOption = {
@@ -385,14 +517,12 @@ export const hillOptions: HillOption[] = [
 export type ResourceOption = {
   id: ResourceType | null;
   name: string;
-  color: string;
 };
 
 export const resourceOptions: ResourceOption[] = [
   {
     id: null,
     name: "자원 지우기",
-    color: "#fffdf8",
   },
   {
     id: {
@@ -401,7 +531,6 @@ export const resourceOptions: ResourceOption[] = [
       category: "strategic",
     },
     name: "전략자원",
-    color: "#a55743",
   },
   {
     id: {
@@ -410,7 +539,6 @@ export const resourceOptions: ResourceOption[] = [
       category: "luxury",
     },
     name: "사치자원",
-    color: "#d776a0",
   },
   {
     id: {
@@ -419,7 +547,6 @@ export const resourceOptions: ResourceOption[] = [
       category: "bonus",
     },
     name: "보너스자원",
-    color: "#79a65d",
   },
   {
     id: {
@@ -428,7 +555,6 @@ export const resourceOptions: ResourceOption[] = [
       category: "artifact",
     },
     name: "유물자원",
-    color: "#b99a65",
   },
   {
     id: {
@@ -437,7 +563,34 @@ export const resourceOptions: ResourceOption[] = [
       category: "special",
     },
     name: "특수자원",
-    color: "#8870ba",
+  },
+];
+
+export type ImprovementOption = {
+  id: ImprovementType | null;
+  name: string;
+};
+
+export const improvementOptions: ImprovementOption[] = [
+  {
+    id: null,
+    name: "개선시설 지우기",
+  },
+  {
+    id: "mine",
+    name: "광산",
+  },
+  {
+    id: "quarry",
+    name: "채석장",
+  },
+  {
+    id: "farm",
+    name: "농장",
+  },
+  {
+    id: "lumber-mill",
+    name: "제재소",
   },
 ];
 

@@ -10,12 +10,14 @@ import {
   terrainOptions,
   toggleRiverEdge,
   calculateDistrictAdjacency,
+  improvementOptions,
   type DistrictType,
   type FeatureType,
   type HexEdge,
   type HexTile,
   type ResourceType,
   type TerrainType,
+  type ImprovementType,
 } from "../data/tiles";
 
 function getHexPosition(q: number, r: number) {
@@ -55,7 +57,13 @@ function shouldRenderRiverEdge(tile: HexTile, edge: HexEdge, tiles: HexTile[]) {
 function PlacementToolPage() {
   const [tiles, setTiles] = useState<HexTile[]>(() => createEmptyBoard(5));
   const [popupTab, setPopupTab] = useState<
-    "district" | "terrain" | "feature" | "hill" | "resource" | "river"
+    | "district"
+    | "terrain"
+    | "feature"
+    | "hill"
+    | "resource"
+    | "improvement"
+    | "river"
   >("district");
   const [selectedTileId, setSelectedTileId] = useState<string | null>(null);
 
@@ -136,6 +144,23 @@ function PlacementToolPage() {
     );
   }
 
+  function placeImprovement(improvement: ImprovementType | null) {
+    if (!selectedTile) {
+      return;
+    }
+
+    setTiles((currentTiles) =>
+      currentTiles.map((tile) =>
+        tile.id === selectedTileId
+          ? {
+              ...tile,
+              improvement,
+            }
+          : tile,
+      ),
+    );
+  }
+
   function toggleRiver(edge: HexEdge) {
     if (!selectedTile) {
       return;
@@ -187,7 +212,13 @@ function PlacementToolPage() {
                     ? "범람원"
                     : tile.feature === "marsh"
                       ? "습지"
-                      : null,
+                      : tile.feature === "forest"
+                        ? "숲"
+                        : tile.feature === "rainforest"
+                          ? "열대우림"
+                          : tile.feature === "reef"
+                            ? "산호초"
+                            : null,
               tile.resource?.category === "strategic"
                 ? "전략"
                 : tile.resource?.category === "luxury"
@@ -199,6 +230,15 @@ function PlacementToolPage() {
                       : tile.resource?.category === "special"
                         ? "특수"
                         : null,
+              tile.improvement === "mine"
+                ? "광산"
+                : tile.improvement === "quarry"
+                  ? "채석장"
+                  : tile.improvement === "farm"
+                    ? "농장"
+                    : tile.improvement === "lumber-mill"
+                      ? "제재소"
+                      : null,
             ].filter((label): label is string => Boolean(label));
             return (
               <button
@@ -210,8 +250,6 @@ function PlacementToolPage() {
                 type="button"
                 style={{
                   transform: `translate(${position.x}px, ${position.y}px)`,
-                  backgroundColor:
-                    districtOption?.color ?? terrainOption?.color,
                 }}
               >
                 <span className="tile-label">
@@ -295,6 +333,13 @@ function PlacementToolPage() {
                   자원
                 </button>
                 <button
+                  className={popupTab === "improvement" ? "selected" : ""}
+                  type="button"
+                  onClick={() => setPopupTab("improvement")}
+                >
+                  개선시설
+                </button>
+                <button
                   className={popupTab === "river" ? "selected" : ""}
                   type="button"
                   onClick={() => setPopupTab("river")}
@@ -321,14 +366,13 @@ function PlacementToolPage() {
                 {popupTab === "terrain" &&
                   terrainOptions.map((option) => (
                     <button
+                      className={
+                        selectedTile.terrain === option.id ? "selected" : ""
+                      }
                       key={option.id}
                       type="button"
                       onClick={() => placeTerrain(option.id)}
                     >
-                      <span
-                        className="palette-color"
-                        style={{ backgroundColor: option.color }}
-                      />
                       {option.name}
                     </button>
                   ))}
@@ -336,14 +380,13 @@ function PlacementToolPage() {
                 {popupTab === "feature" &&
                   featureOptions.map((option) => (
                     <button
+                      className={
+                        selectedTile.feature === option.id ? "selected" : ""
+                      }
                       key={option.name}
                       type="button"
                       onClick={() => placeFeature(option.id)}
                     >
-                      <span
-                        className="palette-color"
-                        style={{ backgroundColor: option.color }}
-                      />
                       {option.name}
                     </button>
                   ))}
@@ -374,14 +417,22 @@ function PlacementToolPage() {
                       type="button"
                       onClick={() => placeResource(option.id)}
                     >
-                      <span
-                        className="palette-color"
-                        style={{ backgroundColor: option.color }}
-                      />
                       {option.name}
                     </button>
                   ))}
-
+                {popupTab === "improvement" &&
+                  improvementOptions.map((option) => (
+                    <button
+                      className={
+                        selectedTile.improvement === option.id ? "selected" : ""
+                      }
+                      key={option.name}
+                      type="button"
+                      onClick={() => placeImprovement(option.id)}
+                    >
+                      {option.name}
+                    </button>
+                  ))}
                 {popupTab === "river" &&
                   riverEdgeOptions.map((option) => (
                     <button
