@@ -250,6 +250,7 @@ function PlacementToolPage() {
                 type="button"
                 style={{
                   transform: `translate(${position.x}px, ${position.y}px)`,
+                  backgroundColor: districtOption?.color,
                 }}
               >
                 <span className="tile-label">
