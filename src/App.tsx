@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import CivilizationDetailPage from "./pages/CivilizationDetailPage";
 import CivilizationGuidePage from "./pages/CivilizationGuidePage";
-import CommunityGuidePage from "./pages/CommunityGuidePage";
+
 import HomePage from "./pages/HomePage";
 import PlacementToolPage from "./pages/PlacementToolPage";
 import WarGuidePage from "./pages/WarGuidePage";
@@ -21,7 +21,6 @@ function App() {
             element={<CivilizationDetailPage />}
           />
           <Route path="/war" element={<WarGuidePage />} />
-          <Route path="/community" element={<CommunityGuidePage />} />
         </Route>
       </Routes>
     </BrowserRouter>
